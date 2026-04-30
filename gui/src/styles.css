@@ -49,10 +49,22 @@ button:disabled { opacity: 0.55; cursor: not-allowed; }
 
 /* ── App shell ─────────────────────────────────────────────────── */
 
+/* `.app-shell` wraps the optional `<UpdateBanner />` and the main `.app`
+ * grid in a vertical flex column so the banner takes its natural height
+ * at the top and the app fills the rest. The banner is normal-flow (not
+ * fixed) so it can't overlay the sidebar header or macOS title bar. */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-height: 0;
+}
+
 .app {
   display: grid;
   grid-template-columns: var(--layout-sidebar) 1fr var(--layout-right-rail);
-  height: 100vh;
+  flex: 1;
+  min-height: 0;
   background: var(--color-paper-base);
 }
 .app.rail-collapsed {
@@ -3307,4 +3319,49 @@ button:disabled { opacity: 0.55; cursor: not-allowed; }
 }
 .provider-form-field-full {
   grid-column: 1 / -1;
+}
+
+/* ── Update banner ─────────────────────────────────────────────── */
+
+.update-banner {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-5);
+  background: var(--color-accent-amber);
+  color: #1a1a1a;
+  font-size: var(--font-size-sm, 13px);
+  font-weight: var(--font-weight-semibold, 600);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+.update-banner__icon {
+  font-size: 14px;
+  line-height: 1;
+}
+.update-banner__text {
+  flex: 1;
+}
+.update-banner__install,
+.update-banner__dismiss {
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.6);
+  color: #1a1a1a;
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--font-size-sm, 13px);
+  font-weight: var(--font-weight-semibold, 600);
+}
+.update-banner__install:hover:not(:disabled) {
+  background: #fff;
+}
+.update-banner__dismiss {
+  background: transparent;
+  border-color: rgba(0, 0, 0, 0.2);
+  font-weight: var(--font-weight-regular, 400);
+}
+.update-banner__error {
+  flex-basis: 100%;
+  color: #6b1f1f;
+  font-weight: var(--font-weight-regular, 400);
+  margin-top: var(--space-1);
 }
