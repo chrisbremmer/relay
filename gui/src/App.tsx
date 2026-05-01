@@ -65,7 +65,7 @@ export function App() {
       setChannels(cs);
       if (!selectedId && cs.length > 0) {
         const firstActive = cs.find((c) => c.status === "active") ?? cs[0];
-        setSelectedId(firstActive.channelId);
+        selectChannel(firstActive.channelId);
       }
     })();
     return () => {
@@ -103,9 +103,21 @@ export function App() {
       .catch(() => setSessionCounts({}));
   }, [refreshTick]);
 
-  useEffect(() => {
-    setSessionId(null);
-  }, [selectedId]);
+  // Atomic setter for the active channel + session pair. The kickoff
+  // path sets both at once; manual channel switches default `sessionId`
+  // back to null so CenterPane loads the right channel history. Doing
+  // this in a single helper (rather than `setSelectedId` + a
+  // selectedId-change effect) avoids the same-id no-op leak — if a
+  // future caller passes the currently-selected channelId, React's
+  // bail-out optimisation would skip the effect and a previously
+  // stashed session id would never get cleared.
+  const selectChannel = useCallback(
+    (channelId: string | null, nextSessionId: string | null = null) => {
+      setSelectedId(channelId);
+      setSessionId(nextSessionId);
+    },
+    []
+  );
 
   const selected = channels.find((c) => c.channelId === selectedId) ?? null;
 
@@ -129,7 +141,7 @@ export function App() {
               includeArchived={includeArchived}
               sessionCounts={sessionCounts}
               runningStreams={runningStreams}
-              onSelect={setSelectedId}
+              onSelect={(id) => selectChannel(id)}
               onNewChannel={(sectionId) => {
                 setNewChannelSection(sectionId ?? null);
                 setModalOpen(true);
@@ -150,7 +162,7 @@ export function App() {
               onSessionCreated={setSessionId}
               onStreamingChanged={setRunningStreams}
               onChannelRemoved={(id) => {
-                if (selectedId === id) setSelectedId(null);
+                if (selectedId === id) selectChannel(null);
                 refresh();
               }}
               onSpinoutToChannel={(kickoff, sectionId) => {
@@ -180,8 +192,12 @@ export function App() {
             setModalOpen(false);
             setNewChannelKickoff("");
           }}
-          onCreated={(id) => {
-            setSelectedId(id);
+          onCreated={(id, kickoffSessionId) => {
+            // Set channel + kickoff session atomically so CenterPane's
+            // stream subscription sees the right sessionId on first
+            // render and Composer doesn't fall through to its
+            // `if (!sessionId) createSession` branch on the user's reply.
+            selectChannel(id, kickoffSessionId);
             setNewChannelKickoff("");
             refresh();
           }}
@@ -190,7 +206,7 @@ export function App() {
           open={dmModalOpen}
           onClose={() => setDmModalOpen(false)}
           onCreated={(id) => {
-            setSelectedId(id);
+            selectChannel(id);
             refresh();
           }}
         />
