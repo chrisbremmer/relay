@@ -1,3 +1,4 @@
+mod install_drift;
 mod ui;
 
 use harness_data as data;
@@ -343,6 +344,12 @@ pub struct App {
     // AL-7/AL-8 approvals queue: pending records across every session.
     // Populated by `refresh()` from `~/.relay/approvals/<sessionId>/queue.jsonl`.
     pub pending_approvals: Vec<data::ApprovalQueueRecord>,
+
+    /// One-line footer text rendered when `rly install` drift is detected
+    /// at startup (running TUI SHA differs from the manifest, or another
+    /// surface is behind/fresh). `None` means no footer; we'd rather
+    /// under-nudge than render a misleading "all good" line.
+    pub update_nudge: Option<String>,
     pub approvals_cursor: usize,
     pub approvals_scroll: usize,
 }
@@ -411,6 +418,7 @@ impl App {
             pending_approvals: Vec::new(),
             approvals_cursor: 0,
             approvals_scroll: 0,
+            update_nudge: install_drift::detect_drift_footer(),
         }
     }
 
@@ -632,6 +640,13 @@ impl App {
     }
 
     fn refresh(&mut self) {
+        // Re-read on every refresh tick (~3s) so peer-surface drift
+        // clears the moment the user runs `rly install gui` from another
+        // terminal without needing to relaunch the TUI. Cost is one
+        // ~1KB JSON read; the primary "running != installed" hint also
+        // refreshes (though that one only changes via relaunch).
+        self.update_nudge = install_drift::detect_drift_footer();
+
         self.channels = load_channels();
         self.agents = load_agent_names();
 
