@@ -46,6 +46,20 @@ Relay turns a sentence, a GitHub issue URL, or a Linear ticket into a **running 
 
 Suitable for individual developers and teams. CLI: **`rly`**.
 
+## Compared to alternatives
+
+|                      | Relay | aider | Devin | Cursor  | claude-flow |
+| -------------------- | ----- | ----- | ----- | ------- | ----------- |
+| Local-first          | ✅    | ✅    | ❌    | partial | ✅          |
+| Multi-repo           | ✅    | ❌    | ❌    | partial | ✅          |
+| Supervises long runs | ✅    | ❌    | ✅    | partial | partial     |
+| Uses your Claude CLI | ✅    | ❌    | ❌    | ❌      | ✅          |
+| No hosted service    | ✅    | ✅    | ❌    | ❌      | ✅          |
+
+A few rows need an asterisk. Cursor 3 (April 2026) introduced local agents that can span multiple repos, but the promoted default — cloud agents — still runs in Cursor-owned VMs and is single-repo today. claude-flow has the `github-multi-repo` skill and a token cost tracker, but its long-run budget caps are advisory rather than hard wall-clock stops. Devin's cloud agent supports cross-repo work in principle, but the session model is one task per VM, not parallel orchestration across repos.
+
+Relay sits next to these tools, not against them. Use Cursor or aider for the inner editing loop and Relay for the outer coordination loop across repos — because Relay shells your existing Claude or Codex CLI, your editor agent and your orchestrator can share the same provider session. The table above is where Relay is differentiated, not where it competes; most users on this list run two of these tools side by side.
+
 ## Use cases
 
 Where Relay earns its keep today:
@@ -62,6 +76,7 @@ Where Relay earns its keep today:
 
 ## Table of contents
 
+- [Compared to alternatives](#compared-to-alternatives)
 - [Install](#install)
   - [Install prerequisites (platform notes)](#install-prerequisites-platform-notes)
 - [Quickstart](#quickstart)
