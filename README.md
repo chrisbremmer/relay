@@ -21,10 +21,10 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/jcast90/relay/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jcast90/relay?style=flat"/></a>
-  <a href="https://github.com/jcast90/relay/issues"><img alt="open issues" src="https://img.shields.io/github/issues/jcast90/relay"/></a>
-  <a href="https://github.com/jcast90/relay/commits/main"><img alt="last commit" src="https://img.shields.io/github/last-commit/jcast90/relay/main"/></a>
-  <a href="#license"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-a6e3a1?style=flat-square"/></a>
+  <a href="https://github.com/jcast90/relay/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jcast90/relay?style=flat&color=f9e2af"/></a>
+  <a href="https://github.com/jcast90/relay/issues"><img alt="open issues" src="https://img.shields.io/github/issues/jcast90/relay?color=fab387"/></a>
+  <a href="https://github.com/jcast90/relay/commits/main"><img alt="last commit" src="https://img.shields.io/github/last-commit/jcast90/relay/main?color=cba6f7"/></a>
+  <a href="#license"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-a6e3a1"/></a>
 </p>
 
 ---
