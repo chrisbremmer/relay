@@ -48,15 +48,15 @@ Suitable for individual developers and teams. CLI: **`rly`**.
 
 ## Compared to alternatives
 
-|                      | Relay | aider | Devin | Cursor  | claude-flow |
-| -------------------- | ----- | ----- | ----- | ------- | ----------- |
-| Local-first          | ✅    | ✅    | ❌    | partial | ✅          |
-| Multi-repo           | ✅    | ❌    | ❌    | partial | ✅          |
-| Supervises long runs | ✅    | ❌    | ✅    | partial | partial     |
-| Uses your Claude CLI | ✅    | ❌    | ❌    | ❌      | ✅          |
-| No hosted service    | ✅    | ✅    | ❌    | ❌      | ✅          |
+|                            | Relay | aider | Devin | Cursor  | claude-flow |
+| -------------------------- | ----- | ----- | ----- | ------- | ----------- |
+| Local-first                | ✅    | ✅    | ❌    | partial | ✅          |
+| Multi-repo                 | ✅    | ❌    | ❌    | partial | ✅          |
+| Supervises long runs       | ✅    | ❌    | ✅    | partial | partial     |
+| Uses your Claude/Codex CLI | ✅    | ❌    | ❌    | ❌      | ✅ (Claude) |
+| No hosted service          | ✅    | ✅    | ❌    | ❌      | ✅          |
 
-A few rows need an asterisk. Cursor 3 (April 2026) introduced local agents that can span multiple repos, but the promoted default — cloud agents — still runs in Cursor-owned VMs and is single-repo today. claude-flow has the `github-multi-repo` skill and a token cost tracker, but its long-run budget caps are advisory rather than hard wall-clock stops. Devin's cloud agent supports cross-repo work in principle, but the session model is one task per VM, not parallel orchestration across repos.
+A few rows need an asterisk. Cursor 3 (April 2026) introduced local agents that can span multiple repos and earned the multi-repo partial; the promoted default — cloud agents — still runs in Cursor-owned VMs and is single-repo today. Cursor's long-run partial sits in the same gap: cloud agents support unattended runs with handoff, but local agents have no documented budget caps. claude-flow has the `github-multi-repo` skill and a token cost tracker, but its long-run budget caps are advisory rather than hard wall-clock stops. Devin's cloud agent supports cross-repo work in principle, but the session model is one task per VM, not parallel orchestration across repos. Relay's ✅ for long-run supervision rests on `--max-hours` wall-clock + `--budget-tokens` token caps + a STOP-file kill switch — the hard stops claude-flow's advisory caps miss; per-dollar cost tracking is still in design (see [Known limits](#known-limits)).
 
 Relay sits next to these tools, not against them. Use Cursor or aider for the inner editing loop and Relay for the outer coordination loop across repos — because Relay shells your existing Claude or Codex CLI, your editor agent and your orchestrator can share the same provider session. The table above is where Relay is differentiated, not where it competes; most users on this list run two of these tools side by side.
 
